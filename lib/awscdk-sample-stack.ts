@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
+import {HitCounter} from "./hitcounter";
 
 export class AwscdkSampleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -14,9 +15,13 @@ export class AwscdkSampleStack extends cdk.Stack {
       handler: "hello.handler",
     });
 
+    const helloWithCounter = new HitCounter(this, "HelloHitCounter", {
+      downstream: helloHandler,
+    });
+
     // API Gateway resources
     new apigw.LambdaRestApi(this, "Endpoint", {
-      handler: helloHandler,
+      handler: helloWithCounter.handler,
     });
   }
 }

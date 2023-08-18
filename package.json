@@ -21,6 +21,8 @@
     "typescript": "~5.1.6"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.391.0",
+    "@aws-sdk/client-lambda": "^3.391.0",
     "aws-cdk-lib": "2.92.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
