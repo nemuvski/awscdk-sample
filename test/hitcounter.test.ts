@@ -23,7 +23,7 @@ test("DynamoDB Table Created", () => {
 
 /**
  * 生成されたスタックにLambda関数が含まれているか確認するテスト
- * その関数には、環境変数が設定さえrていることをテスト
+ * その関数には、環境変数が設定されていることをテスト
  */
 test("Lambda has environment variables", () => {
   const stack = new cdk.Stack();
