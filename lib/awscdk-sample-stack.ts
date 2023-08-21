@@ -18,6 +18,7 @@ export class AwscdkSampleStack extends cdk.Stack {
 
     const helloWithCounter = new HitCounter(this, "HelloHitCounter", {
       downstream: helloHandler,
+      readCapacity: 5,
     });
 
     // API Gateway resources
