@@ -20,6 +20,8 @@ export class HitCounter extends Construct {
 
     const table = new dynamodb.Table(this, "Hits", {
       partitionKey: { name: "path", type: dynamodb.AttributeType.STRING },
+      // AWSが管理するKMSキーを使用してテーブルを暗号化する
+      encryption: dynamodb.TableEncryption.AWS_MANAGED,
     });
     this.table = table;
 

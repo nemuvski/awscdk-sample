@@ -55,3 +55,25 @@ test("Lambda has environment variables", () => {
     },
   });
 });
+
+/**
+ * DynamoDBテーブルが暗号化されているか確認するテスト
+ */
+test("DynamoDB Table created with encryption", () => {
+  const stack = new cdk.Stack();
+
+  new HitCounter(stack, "MyTestConstruct", {
+    downstream: new lambda.Function(stack, "TestFunction", {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "hello.handler",
+      code: lambda.Code.fromAsset("lambda"),
+    }),
+  });
+
+  const template = Template.fromStack(stack);
+  template.hasResourceProperties("AWS::DynamoDB::Table", {
+    SSESpecification: {
+      SSEEnabled: true,
+    },
+  });
+});
