@@ -2,7 +2,8 @@ import * as cdk from "aws-cdk-lib";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
-import {HitCounter} from "./hitcounter";
+import { HitCounter } from "./hitcounter";
+import { TableViewer } from "cdk-dynamo-table-viewer";
 
 export class AwscdkSampleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -22,6 +23,12 @@ export class AwscdkSampleStack extends cdk.Stack {
     // API Gateway resources
     new apigw.LambdaRestApi(this, "Endpoint", {
       handler: helloWithCounter.handler,
+    });
+
+    // DynamoDB Table Viewer
+    new TableViewer(this, "ViewHitCounter", {
+      title: "Hello Hits",
+      table: helloWithCounter.table,
     });
   }
 }
