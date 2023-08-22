@@ -38,6 +38,7 @@ export class HitCounter extends Construct {
       // AWSが管理するKMSキーを使用してテーブルを暗号化する
       encryption: dynamodb.TableEncryption.AWS_MANAGED,
       readCapacity: props.readCapacity ?? 5,
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
     this.table = table;
 
