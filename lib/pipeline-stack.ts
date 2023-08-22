@@ -28,5 +28,23 @@ export class WorkshopPipelineStack extends cdk.Stack {
     // パイプラインのステージを追加
     const deployment = new WorkshopPipelineStage(this, "Deploy");
     const deploymentStage = pipeline.addStage(deployment);
+
+    // エンドポイントの確認のために、デプロイ後にcurlを実行する
+    deploymentStage.addPost(
+      new CodeBuildStep("TestViewerEndpoint", {
+        projectName: "TestViewerEndpoint",
+        envFromCfnOutputs: {
+          ENDPOINT_URL: deployment.hcViewerUrl,
+        },
+        commands: ["curl -Ssf $ENDPOINT_URL"],
+      }),
+      new CodeBuildStep("TestAPIGatewayEndpoint", {
+        projectName: "TestAPIGatewayEndpoint",
+        envFromCfnOutputs: {
+          ENDPOINT_URL: deployment.hcEndpoint,
+        },
+        commands: ["curl -Ssf $ENDPOINT_URL"],
+      })
+    );
   }
 }

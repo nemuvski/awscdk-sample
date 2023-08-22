@@ -6,6 +6,10 @@ import { HitCounter } from "./hitcounter";
 import { TableViewer } from "cdk-dynamo-table-viewer";
 
 export class AwscdkSampleStack extends cdk.Stack {
+  // hc = HitCounter
+  public readonly hcViewerUrl: cdk.CfnOutput;
+  public readonly hcEndpoint: cdk.CfnOutput;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -22,15 +26,21 @@ export class AwscdkSampleStack extends cdk.Stack {
     });
 
     // API Gateway resources
-    new apigw.LambdaRestApi(this, "Endpoint", {
+    const apiGateway = new apigw.LambdaRestApi(this, "Endpoint", {
       handler: helloWithCounter.handler,
+    });
+    this.hcEndpoint = new cdk.CfnOutput(this, "GatewayUrl", {
+      value: apiGateway.url,
     });
 
     // DynamoDB Table Viewer
-    new TableViewer(this, "ViewHitCounter", {
+    const tableViewer = new TableViewer(this, "ViewHitCounter", {
       title: "Hello Hits",
       table: helloWithCounter.table,
       sortBy: "-hits",
+    });
+    this.hcViewerUrl = new cdk.CfnOutput(this, "TableViewerUrl", {
+      value: tableViewer.endpoint,
     });
   }
 }
